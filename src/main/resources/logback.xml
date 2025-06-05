@@ -1,0 +1,61 @@
+<configuration>
+    <property name="LOG_DIR" value="${LOG_DIR:-logs}"/>
+    <property name="APP_NAME" value="${APP_NAME:-app}"/>
+    <property name="MAX_HISTORY_DAYS" value="${MAX_HISTORY_DAYS:-30}"/>
+    <property name="LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} [%-5level] %-30.30logger - %msg%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${APP_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY_DAYS}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${APP_NAME}.error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${APP_NAME}.error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY_DAYS}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="HTTP_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${APP_NAME}.access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${APP_NAME}.access.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY_DAYS}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} %logger{36} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="HTTP" level="INFO" additivity="false">
+        <appender-ref ref="HTTP_LOGGER"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+
+    <root level="${LOG_LEVEL:-INFO}">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>

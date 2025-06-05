@@ -1,0 +1,13 @@
+server:
+    port: 8000
+    preWait: "5s"
+
+database:
+    url: ""
+    driver: ""
+
+log:
+    dir: logs
+    level: INFO
+    appName: app-name
+    maxHistoryDays: 30
