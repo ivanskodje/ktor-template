@@ -12,3 +12,6 @@ A quick ktor starter to reduce initial boilerplate setup.
 - HealthCheck route
 - Info route that requires auth bearer token
 - Rotating file logging with separate error and access logs
+
+## Ivan's Favorite Food
+- Noodles
